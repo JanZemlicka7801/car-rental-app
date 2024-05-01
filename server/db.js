@@ -33,14 +33,13 @@ app.post('/rentals', (req, res) => {
   
     const { car_id, addons, rental_days } = req.body;
   
-    // Fetch the user's ID based on their username
     db.query('SELECT id FROM users WHERE username = ?', [username], (err, result) => {
         if (err) {
             console.error('Error fetching user id:', err);
             return res.status(500).json({ message: "Error fetching user id" });
         }
         
-        const loggedInUserId = result[0].id; // Assuming username is unique
+        const loggedInUserId = result[0].id;
 
         const sql = "INSERT INTO rentals (user_id, car_id, addons, rental_days) VALUES (?, ?, ?, ?)";
         const values = [loggedInUserId, car_id, JSON.stringify(addons), rental_days];
@@ -55,9 +54,6 @@ app.post('/rentals', (req, res) => {
         });
     });
 });
-
-  
-
 
 const db = mysql.createConnection({
     host: "localhost",
