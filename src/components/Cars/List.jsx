@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import CarSelection from './CarSelection';
 
-const List = () => {
+const List = ({ name }) => {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCar, setSelectedCar] = useState(null); // Track the selected car
-  const navigate = useNavigate();
+  const [selectedCar, setSelectedCar] = useState(null); 
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -24,10 +22,10 @@ const List = () => {
     fetchCars();
   }, []);
 
-const handleCarSelect = (car, event) => {
-  event.preventDefault(); // Prevent default behavior
-  setSelectedCar(selectedCar === car ? null : car); // Toggle selected car
-};
+  const handleCarSelect = (car, event) => {
+    event.preventDefault(); 
+    setSelectedCar(selectedCar === car ? null : car); 
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -40,19 +38,18 @@ const handleCarSelect = (car, event) => {
       </h1>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
         {cars.map((car) => (
-          <div key={car.id} className='card p-4 rounded-lg border border-gray-300 hover:border-primary'>
+          <div key={car.id} className='card p-4 rounded-lg border border-gray-300 hover:border-primary aos-init aos-animate'>
             <h2 className='text-xl font-semibold mb-2'>{car.brand} {car.model} ({car.year})</h2>
             <p><span className='font-semibold'>Color:</span> {car.color}</p>
             <p><span className='font-semibold'>Mileage:</span> {car.mileage} km</p>
             <p><span className='font-semibold'>Daily Rental Rate:</span> ${car.daily_rental_rate}</p>
             <div className="w-full h-[200px]">
-              <img onClick={(event) => handleCarSelect(car, event)} className='w-full h-full object-contain' src={car.image_url} alt={`${car.brand} ${car.model}`} />
+              <img onClick={(event) => handleCarSelect(car, event)} className='w-full h-full object-contain group-hover:translate-x-16 duration-700' src={car.image_url} alt={`${car.brand} ${car.model}`} />
             </div>
-            <CarSelection showAdds={selectedCar !== null} car={selectedCar} />
+            <CarSelection showAdds={selectedCar !== null} car={selectedCar} name={name} />
           </div>
         ))}
       </div>
-      
     </div>
   );
 };
