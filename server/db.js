@@ -42,6 +42,17 @@ app.get('/cars', (req, res) => {
     });
 });
 
+app.get('/addons', (req, res) => {
+    const sql = "SELECT * FROM addons"; 
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error fetching addons:', err);
+            return res.status(500).json({ message: "Error fetching addons from database" });
+        }
+        return res.json(result);
+    });
+});
+
 app.get('/', (req, res) => {
     if(req.session.username) {
         return res.json({valid: true, username: req.session.username})
