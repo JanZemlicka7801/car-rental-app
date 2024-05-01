@@ -22,3 +22,13 @@ CREATE TABLE addons (
     name VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL
 );
+
+CREATE TABLE rentals (
+    rental_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    car_id INT NOT NULL,
+    addons TEXT,
+    rental_days INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (car_id) REFERENCES cars(car_id)
+);
