@@ -43,7 +43,7 @@ const Cars = () => {
     <div>
       <Navbar name={name}/>
       <Heading />
-      <List />
+      <List name={name}/>
       <Footer />
     </div>
   )
