@@ -24,6 +24,41 @@ app.use(session({
     } //set the cookie properties
 }))
 
+app.post('/rentals', (req, res) => {
+    if (!req.session.username) {
+      return res.status(401).json({ message: "User is not logged in" });
+    }
+  
+    const username = req.session.username;
+  
+    const { car_id, addons, rental_days } = req.body;
+  
+    // Fetch the user's ID based on their username
+    db.query('SELECT id FROM users WHERE username = ?', [username], (err, result) => {
+        if (err) {
+            console.error('Error fetching user id:', err);
+            return res.status(500).json({ message: "Error fetching user id" });
+        }
+        
+        const loggedInUserId = result[0].id; // Assuming username is unique
+
+        const sql = "INSERT INTO rentals (user_id, car_id, addons, rental_days) VALUES (?, ?, ?, ?)";
+        const values = [loggedInUserId, car_id, JSON.stringify(addons), rental_days];
+      
+        db.query(sql, values, (err, result) => {
+            if (err) {
+                console.error('Error inserting rental:', err);
+                return res.status(500).json({ message: "Error inserting rental into database", error: err });
+            }
+            console.log('Rental submitted successfully:', result);
+            return res.json({ message: "Rental submitted successfully", result });
+        });
+    });
+});
+
+  
+
+
 const db = mysql.createConnection({
     host: "localhost",
     user: 'root',
